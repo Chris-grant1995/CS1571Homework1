@@ -80,7 +80,7 @@ class Problem2:
 
 
     def ucs(self,graph, v):
-        visited = set()                  # set of visited nodes
+        visited = []                  # set of visited nodes
         q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
                                          # (f, n, path), with
                                          # f: the cumulative cost,
@@ -91,11 +91,11 @@ class Problem2:
 
         queueSizes = []
         visitedSizes = []
-        time = 0
+        time = len(graph.edges.keys())
 
         while not q.empty():             # while the queue is nonempty
             f, current_node, path = q.get()
-            visited.add(current_node)    # mark node visited on expansion,
+            visited.append(current_node)    # mark node visited on expansion,
                                          # only now we know we are on the cheapest path to
                                          # the current node.
             visitedSizes.append(len(visited))
@@ -146,7 +146,7 @@ class Problem2:
             if route:
                 return
     def greedy(self,graph, v):
-        visited = set()                  # set of visited nodes
+        visited = []                  # set of visited nodes
         q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
                                          # (f, n, path), with
                                          # f: the cumulative cost,
@@ -160,7 +160,7 @@ class Problem2:
 
         while not q.empty():             # while the queue is nonempty
             f, current_node, path = q.get()
-            visited.add(current_node)    # mark node visited on expansion,
+            visited.append(current_node)    # mark node visited on expansion,
                                          # only now we know we are on the cheapest path to
                                          # the current node.
             visitedSizes.append(len(visited))
@@ -177,7 +177,7 @@ class Problem2:
                     queueSizes.append(len(q.queue))
         return "No Solution"
     def astar(self,graph, v):
-        visited = set()                  # set of visited nodes
+        visited = []                  # set of visited nodes
         q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
                                          # (f, n, path), with
                                          # f: the cumulative cost,
@@ -191,7 +191,7 @@ class Problem2:
 
         while not q.empty():             # while the queue is nonempty
             f, current_node, path = q.get()
-            visited.add(current_node)    # mark node visited on expansion,
+            visited.append(current_node)    # mark node visited on expansion,
                                          # only now we know we are on the cheapest path to
                                          # the current node.
             visitedSizes.append(len(visited))
