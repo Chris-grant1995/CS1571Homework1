@@ -12,7 +12,7 @@ class Graph:
     def neighbors(self, node):
         return self.edges[node]
     def getCoords(self, node):
-        return self.coords(node)
+        return self.coords[node]
 
     def get_cost(self, from_node, to_node):
         return self.weights[(from_node + to_node)]
@@ -40,6 +40,16 @@ class Problem2:
             q = PriorityQueue()
             for edge in graph.edges:
                 q.put(self.ucs(graph,edge))
+            print q.get()
+        elif algo == "astar":
+            q = PriorityQueue()
+            for edge in graph.edges:
+                q.put(self.astar(graph,edge))
+            print q.get()
+        elif algo == "greedy":
+            q = PriorityQueue()
+            for edge in graph.edges:
+                q.put(self.astar(graph,edge))
             print q.get()
 
 
@@ -81,6 +91,7 @@ class Problem2:
 
         queueSizes = []
         visitedSizes = []
+        time = 0
 
         while not q.empty():             # while the queue is nonempty
             f, current_node, path = q.get()
@@ -88,12 +99,13 @@ class Problem2:
                                          # only now we know we are on the cheapest path to
                                          # the current node.
             visitedSizes.append(len(visited))
+            time+=1
 
             #print path
 
             if self.checkFinished(graph,path):
                 finalCost = self.calculatePath(graph,path)
-                return (finalCost,(path,finalCost,max(queueSizes), max(visitedSizes)))
+                return (finalCost,(path,finalCost,max(queueSizes), max(visitedSizes), time))
             else:
                 for edge in graph.neighbors(current_node):
                     #if edge not in visited:
