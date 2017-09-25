@@ -9,4 +9,4 @@ I used this webpage as a starting point for the uninformed search strategies, an
 http://cyluun.github.io/blog/uninformed-search-algorithms-in-python
 
 I spoke with Ryan Yoder and Paul Davis about the asssignment. For the most part, we talked about implementation details and worked
-together to debug issues that we were having. 
+together to debug issues that we were having.

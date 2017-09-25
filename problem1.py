@@ -35,203 +35,224 @@ class Graph:
         return math.sqrt(s1 + s2)
 
 
-
-def bfs(graph, start):
-    visited = []
-    queue = deque()
-    queue.append(start)
-    queueSizes = []
-    visitedSizes = []
-
-    while queue:
-        node = queue.pop()
-        if node not in visited:
-            visited.append(node)
-            visitedSizes.append(len(visited))
-
-            if checkFinished(graph,visited):
-                print visited
-                print "Nodes Created: ", len(graph.edges.keys())
-                print "Frontier Max Size: ",max(queueSizes)
-                print "Visited Max Size: ", max(visitedSizes)
-                return
-            for neighbor in graph.neighbors(node):
-                if neighbor not in visited:
-                    queue.appendleft(neighbor)
-                    queueSizes.append(len(queue))
-
-
-def ucs(graph, v):
-    visited = []                  # set of visited nodes
-    q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
-                                     # (f, n, path), with
-                                     # f: the cumulative cost,
-                                     # n: the current node,
-                                     # path: the path that led to the expansion of the current node
-    q.put((0,0,v, [v]))               # add the starting node, this has zero *cumulative* cost
-                                     # and it's path contains only itself.
-
-    queueSizes = []
-    visitedSizes = []
-    time = len(graph.edges.keys())
-
-    while not q.empty():             # while the queue is nonempty
-        print q.queue
-        f,b, current_node, path = q.get()
-        visited.append(current_node)    # mark node visited on expansion,
-                                     # only now we know we are on the cheapest path to
-                                     # the current node.
-        visitedSizes.append(len(visited))
-        time+=1
-
-        #print path
-
-        if checkFinished(graph,path):
-            finalCost = calculateMaxTime(graph, path)
-            #print q.queue
-            return (finalCost,(path,finalCost,max(queueSizes), max(visitedSizes), time))
-        else:
-            for edge in graph.neighbors(current_node):
-                if edge not in visited:
-                    if edge in graph.sensors:
-                        battery = graph.battery[edge]
-                    else:
-                        battery = 0
-                    q.put((f + graph.get_cost(current_node,edge),-battery, edge, path + [edge]))
-                    #q.put((graph.get_cost(current_node, edge), edge, path + [edge]))
-                    queueSizes.append(len(q.queue))
-
-
-    return "No Solution"
-
-def id_dfs(graph,start):
-    import itertools
-
-    def dfs(graph, start,depth ):
+class Problem1:
+    def __init__(self):
+        self.test = "test"
+    def solveProblem(self,filename, algo):
+        graph = self.parseInput(filename)
+        if graph == None:
+            return
+        if algo == "unicost":
+            q = PriorityQueue()
+            for edge in graph.sensors:
+                q.put(self.ucs(graph,edge))
+            print q.get()
+        elif algo == "astar":
+            q = PriorityQueue()
+            for edge in graph.sensors:
+                q.put(self.astar(graph,edge))
+            print q.get()
+        elif algo == "greedy":
+            q = PriorityQueue()
+            for edge in graph.sensors:
+                q.put(self.greedy(graph,edge))
+            print q.get()
+        elif algo == "iddfs":
+            q = PriorityQueue()
+            for edge in graph.sensors:
+                q.put(self.id_dfs(graph,edge))
+            print q.get()
+        elif algo == "bfs":
+            q = PriorityQueue()
+            for edge in graph.sensors:
+                q.put(self.bfs(graph,edge))
+            print q.get()
+    def bfs(self,graph, start):
         visited = []
-        stack = [start]
-        stackSizes = []
+        queue = deque()
+        queue.append(start)
+        queueSizes = []
         visitedSizes = []
 
-        while stack:
-            node = stack.pop()
+        while queue:
+            node = queue.pop()
             if node not in visited:
                 visited.append(node)
                 visitedSizes.append(len(visited))
-                if len(visited) > depth:
-                    return
-                if checkFinished(graph,visited):
+
+                if self.checkFinished(graph,visited):
                     print visited
                     print "Nodes Created: ", len(graph.edges.keys())
-                    print "Frontier Max Size: ", max(stackSizes)
+                    print "Frontier Max Size: ",max(queueSizes)
                     print "Visited Max Size: ", max(visitedSizes)
-                    return visited
+                    return
                 for neighbor in graph.neighbors(node):
                     if neighbor not in visited:
-                        stack.append(neighbor)
-                        stackSizes.append(len(stack))
-
-    for depth in itertools.count():
-        route = dfs(graph,start, depth)
-        if route:
-            return
+                        queue.appendleft(neighbor)
+                        queueSizes.append(len(queue))
 
 
-def checkFinished(graph,monitored):
-    print monitored
-    for target in graph.targets:
-        if target not in monitored:
-            return False
-    return True
-def calculateDistance(p, q):
-    q1 = q[0]
-    q2 = q[1]
-    p1 = p[0]
-    p2 = p[1]
+    def ucs(self,graph, v):
+        visited = []                  # set of visited nodes
+        q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
+                                         # (f, n, path), with
+                                         # f: the cumulative cost,
+                                         # n: the current node,
+                                         # path: the path that led to the expansion of the current node
+        q.put((0,v, [v]))               # add the starting node, this has zero *cumulative* cost
+                                         # and it's path contains only itself.
 
-    s1 = (q1 - p1)**2
-    s2 = (q2 - p2)**2
+        queueSizes = []
+        visitedSizes = []
+        time = len(graph.edges.keys())
 
-    return math.sqrt(s1+s2)
-def calculateMaxTime(graph,path):
-    times = []
-    for i in range(0,len(path), 2):
-        sensor = path[i]
-        target = path[i+1]
-        battery = graph.battery[sensor]
-        distance = graph.getEuclidianDistance(sensor,target)
-        times.append( battery //distance)
-    print times
-    return min(times)
-def parseInput(file_name_string):
+        while not q.empty():             # while the queue is nonempty
+            #print q.queue
+            f, current_node, path = q.get()
+            visited.append(current_node)    # mark node visited on expansion,
+                                         # only now we know we are on the cheapest path to
+                                         # the current node.
+            visitedSizes.append(len(visited))
+            time+=1
 
-    with open(file_name_string, 'r') as f:
-        data = f.read()
+            #print path
 
-    dataArr = data.split("\n")
+            if self.checkFinished(graph,path):
+                finalCost = self.calculateMaxTime(graph, path)
+                #print q.queue
+                return (finalCost,(path,finalCost,max(queueSizes), max(visitedSizes), time))
+            else:
+                #print graph.sensors
+                for edge in graph.neighbors(current_node):
+                    if edge not in visited:
+                        q.put((f + graph.get_cost(current_node,edge),edge, path + [edge]))
+                        #q.put((graph.get_cost(current_node, edge), edge, path + [edge]))
+                        queueSizes.append(len(q.queue))
 
-    if not dataArr[0] == "monitor":
-        print "Unknown config file"
-        return
 
-    sensors = make_tuple(dataArr[1])
-
-    targets = make_tuple(dataArr[2])
-
-    if len(targets) > len(sensors):
         return "No Solution"
 
-    g = Graph()
+    def id_dfs(self,graph,start):
+        import itertools
 
-    for sensor in sensors:
-        g.edges[sensor[0]] = []
-        g.coords[sensor[0]] = (sensor[1], sensor[2])
-        g.battery[sensor[0]] = sensor[3]
-        g.sensors.append(sensor[0])
+        def dfs(graph, start,depth ):
+            visited = []
+            stack = [start]
+            stackSizes = []
+            visitedSizes = []
 
-    for target in targets:
-        g.edges[target[0]] = []
-        g.coords[target[0]] = (target[1], target[2])
-        g.targets.append(target[0])
+            while stack:
+                node = stack.pop()
+                if node not in visited:
+                    visited.append(node)
+                    visitedSizes.append(len(visited))
+                    if len(visited) > depth:
+                        return
+                    if self.checkFinished(graph,visited):
+                        print visited
+                        print "Nodes Created: ", len(graph.edges.keys())
+                        print "Frontier Max Size: ", max(stackSizes)
+                        print "Visited Max Size: ", max(visitedSizes)
+                        return visited
+                    for neighbor in graph.neighbors(node):
+                        if neighbor not in visited:
+                            stack.append(neighbor)
+                            stackSizes.append(len(stack))
 
-    for sensor in sensors:
-        for target in targets:
-            g.edges[sensor[0]].append(target[0])
-            distance = g.getEuclidianDistance(sensor[0], target[0])
-            battery = g.battery[sensor[0]]
-            g.weights[sensor[0] + target[0]] = -(battery/distance)
-    for target in targets:
+        for depth in itertools.count():
+            route = dfs(graph,start, depth)
+            if route:
+                return
+
+
+    def checkFinished(self,graph,monitored):
+        for target in graph.targets:
+            if target not in monitored:
+                return False
+        return True
+    def calculateDistance(self,p, q):
+        q1 = q[0]
+        q2 = q[1]
+        p1 = p[0]
+        p2 = p[1]
+
+        s1 = (q1 - p1)**2
+        s2 = (q2 - p2)**2
+
+        return math.sqrt(s1+s2)
+    def calculateMaxTime(self,graph,path):
+        times = []
+        print path
+        for i in range(0,len(path), 2):
+            sensor = path[i]
+            target = path[i+1]
+            battery = graph.battery[sensor]
+            distance = graph.getEuclidianDistance(sensor,target)
+            times.append( battery //distance)
+        #print times
+        return min(times)
+    def parseInput(self,file_name_string):
+
+        with open(file_name_string, 'r') as f:
+            data = f.read()
+
+        dataArr = data.split("\n")
+
+        if not dataArr[0] == "monitor":
+            print "Unknown config file"
+            return
+
+        sensors = make_tuple(dataArr[1])
+
+        targets = make_tuple(dataArr[2])
+
+        if len(targets) > len(sensors):
+            return "No Solution"
+
+        g = Graph()
+
         for sensor in sensors:
-            g.edges[target[0]].append(sensor[0])
+            g.edges[sensor[0]] = []
+            g.coords[sensor[0]] = (sensor[1], sensor[2])
+            g.battery[sensor[0]] = sensor[3]
+            g.sensors.append(sensor[0])
 
-            # weights = []
-            # for edge in g.targets:
-            #     distance = g.getEuclidianDistance(sensor[0], edge)
-            #     battery = g.battery[sensor[0]]
-            #     #weights[edge] = -(battery / distance)
-            #     weights.append(-(battery/distance))
-            # print target[0], " ", sensor[0], " ", weights
-            # g.weights[target[0] + sensor[0]] = max(weights)
+        for target in targets:
+            g.edges[target[0]] = []
+            g.coords[target[0]] = (target[1], target[2])
+            g.targets.append(target[0])
 
-            # distance = g.getEuclidianDistance(sensor[0], target[0])
-            # g.weights[target[0] + sensor[0]] = -distance
+        for sensor in sensors:
+            for target in targets:
+                g.edges[sensor[0]].append(target[0])
+                distance = g.getEuclidianDistance(sensor[0], target[0])
+                battery = g.battery[sensor[0]]
+                g.weights[sensor[0] + target[0]] = -(battery/distance)
+        for target in targets:
+            for sensor in sensors:
+                g.edges[target[0]].append(sensor[0])
 
-            # distance = g.battery[sensor[0]]
-            # g.weights[target[0] + sensor[0]] = -distance
+                # weights = []
+                # for edge in g.targets:
+                #     distance = g.getEuclidianDistance(sensor[0], edge)
+                #     battery = g.battery[sensor[0]]
+                #     #weights[edge] = -(battery / distance)
+                #     weights.append(-(battery/distance))
+                # print target[0], " ", sensor[0], " ", weights
+                # g.weights[target[0] + sensor[0]] = max(weights)
 
-            # distance = g.getEuclidianDistance(sensor[0], target[0])
-            # battery = g.battery[sensor[0]]
-            # g.weights[target[0] + sensor[0]] = -(battery / distance)
+                # distance = g.getEuclidianDistance(sensor[0], target[0])
+                # g.weights[target[0] + sensor[0]] = -distance
 
-            g.weights[target[0] + sensor[0]] = 0
+                # distance = g.battery[sensor[0]]
+                # g.weights[target[0] + sensor[0]] = -distance
 
-    return g
+                # distance = g.getEuclidianDistance(sensor[0], target[0])
+                # battery = g.battery[sensor[0]]
+                # g.weights[target[0] + sensor[0]] = -(battery / distance)
 
-graph = parseInput("monitor.config")
-result = ucs(graph,"S_3")
-#print graph.weights["T_1S_4"]
-#print graph.getEuclidianDistance("T_1", "S_4")
-print result
+                g.weights[target[0] + sensor[0]] = 0
 
+        return g
 
 

@@ -1,5 +1,6 @@
 import sys
 from problem2 import Problem2
+from problem1 import Problem1
 
 
 def main():
@@ -19,9 +20,7 @@ def main():
     if dataArr[0] == "aggregation":
         p = Problem2()
     else:
-        #p = Problem1()
-        p = None
-        print "Problem 1 Coming Soon"
+        p = Problem1()
 
     p.solveProblem(sys.argv[1], sys.argv[2])
 
