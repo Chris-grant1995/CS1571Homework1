@@ -29,8 +29,6 @@ class Graph:
         s1 = (q1 - p1) ** 2
         s2 = (q2 - p2) ** 2
         return math.sqrt(s1 + s2)
-
-
 class Problem2:
     def __init__(self):
         self.test = "test"
