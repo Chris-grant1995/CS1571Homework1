@@ -36,6 +36,8 @@ class Problem2:
         self.test = "test"
     def solveProblem(self,filename, algo):
         graph = self.parseInput(filename)
+        if graph == None:
+            return
         if algo == "unicost":
             q = PriorityQueue()
             for edge in graph.edges:
@@ -49,7 +51,17 @@ class Problem2:
         elif algo == "greedy":
             q = PriorityQueue()
             for edge in graph.edges:
-                q.put(self.astar(graph,edge))
+                q.put(self.greedy(graph,edge))
+            print q.get()
+        elif algo == "iddfs":
+            q = PriorityQueue()
+            for edge in graph.edges:
+                q.put(self.id_dfs(graph,edge))
+            print q.get()
+        elif algo == "bfs":
+            q = PriorityQueue()
+            for edge in graph.edges:
+                q.put(self.bfs(graph,edge))
             print q.get()
 
 
@@ -67,11 +79,12 @@ class Problem2:
                 visitedSizes.append(len(visited))
 
                 if self.checkFinished(graph,visited):
-                    print visited
-                    print "Nodes Created: ", len(graph.edges.keys())
-                    print "Frontier Max Size: ",max(queueSizes)
-                    print "Visited Max Size: ", max(visitedSizes)
-                    return
+                    # print visited
+                    # print "Nodes Created: ", len(graph.edges.keys())
+                    # print "Frontier Max Size: ",max(queueSizes)
+                    # print "Visited Max Size: ", max(visitedSizes)
+                    ret = (len(graph.edges.keys()), (visited, len(graph.edges.keys()), max(queueSizes), max(visitedSizes)))
+                    return ret
                 for neighbor in graph.neighbors(node):
                     if neighbor not in visited:
                         queue.appendleft(neighbor)
@@ -93,6 +106,14 @@ class Problem2:
         visitedSizes = []
         time = len(graph.edges.keys())
 
+        # Because we don't care if we've visited a node before in our algorithm
+        # if a node has no edges, the loop will run forever, so running BFS
+        # before will tell us if there are any unreachable nodes, and if there are
+        # we already know that there is no solution
+        v = self.bfs(graph,v)
+        if v == "No Solution":
+            return "No Solution"
+
         while not q.empty():             # while the queue is nonempty
             f, current_node, path = q.get()
             visited.append(current_node)    # mark node visited on expansion,
@@ -111,7 +132,6 @@ class Problem2:
                     #if edge not in visited:
                     q.put((f + graph.get_cost(current_node,edge), edge, path + [edge]))
                     queueSizes.append(len(q.queue))
-        return "No Solution"
 
     def id_dfs(self,graph,start):
         import itertools
@@ -130,11 +150,12 @@ class Problem2:
                     if len(visited) > depth:
                         return
                     if self.checkFinished(graph,visited):
-                        print visited
-                        print "Nodes Created: ", len(graph.edges.keys())
-                        print "Frontier Max Size: ", max(stackSizes)
-                        print "Visited Max Size: ", max(visitedSizes)
-                        return visited
+                        # print visited
+                        # print "Nodes Created: ", len(graph.edges.keys())
+                        # print "Frontier Max Size: ", max(stackSizes)
+                        # print "Visited Max Size: ", max(visitedSizes)
+                        ret = (len(graph.edges.keys()), (visited,len(graph.edges.keys()), max(stackSizes),max(visitedSizes) ))
+                        return ret
                     for neighbor in graph.neighbors(node):
                         if neighbor not in visited:
                             stack.append(neighbor)
@@ -144,7 +165,7 @@ class Problem2:
         for depth in itertools.count():
             route = dfs(graph,start, depth)
             if route:
-                return
+                return route
     def greedy(self,graph, v):
         visited = []                  # set of visited nodes
         q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
@@ -157,6 +178,14 @@ class Problem2:
 
         queueSizes = []
         visitedSizes = []
+
+        # Because we don't care if we've visited a node before in our algorithm
+        # if a node has no edges, the loop will run forever, so running BFS
+        # before will tell us if there are any unreachable nodes, and if there are
+        # we already know that there is no solution
+        v = self.bfs(graph, v)
+        if v == "No Solution":
+            return "No Solution"
 
         while not q.empty():             # while the queue is nonempty
             f, current_node, path = q.get()
@@ -175,7 +204,6 @@ class Problem2:
                     #if edge not in visited:
                     q.put((f + graph.getEuclidianDistance(current_node,edge), edge, path + [edge]))
                     queueSizes.append(len(q.queue))
-        return "No Solution"
     def astar(self,graph, v):
         visited = []                  # set of visited nodes
         q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
@@ -188,6 +216,15 @@ class Problem2:
 
         queueSizes = []
         visitedSizes = []
+
+
+        # Because we don't care if we've visited a node before in our algorithm
+        # if a node has no edges, the loop will run forever, so running BFS
+        # before will tell us if there are any unreachable nodes, and if there are
+        # we already know that there is no solution
+        v = self.bfs(graph, v)
+        if v == "No Solution":
+            return "No Solution"
 
         while not q.empty():             # while the queue is nonempty
             f, current_node, path = q.get()
@@ -206,7 +243,6 @@ class Problem2:
                     #if edge not in visited:
                     q.put((f + graph.get_cost(current_node,edge) + graph.getEuclidianDistance(current_node,edge), edge, path + [edge]))
                     queueSizes.append(len(q.queue))
-        return "No Solution"
 
     def calculatePath(self,graph, path):
         cost = 0

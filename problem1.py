@@ -68,7 +68,7 @@ def ucs(graph, v):
                                      # f: the cumulative cost,
                                      # n: the current node,
                                      # path: the path that led to the expansion of the current node
-    q.put((0, v, [v]))               # add the starting node, this has zero *cumulative* cost
+    q.put((0,0,v, [v]))               # add the starting node, this has zero *cumulative* cost
                                      # and it's path contains only itself.
 
     queueSizes = []
@@ -77,7 +77,7 @@ def ucs(graph, v):
 
     while not q.empty():             # while the queue is nonempty
         print q.queue
-        f, current_node, path = q.get()
+        f,b, current_node, path = q.get()
         visited.append(current_node)    # mark node visited on expansion,
                                      # only now we know we are on the cheapest path to
                                      # the current node.
@@ -93,7 +93,11 @@ def ucs(graph, v):
         else:
             for edge in graph.neighbors(current_node):
                 if edge not in visited:
-                    q.put((f + graph.get_cost(current_node,edge), edge, path + [edge]))
+                    if edge in graph.sensors:
+                        battery = graph.battery[edge]
+                    else:
+                        battery = 0
+                    q.put((f + graph.get_cost(current_node,edge),-battery, edge, path + [edge]))
                     #q.put((graph.get_cost(current_node, edge), edge, path + [edge]))
                     queueSizes.append(len(q.queue))
 
@@ -200,14 +204,14 @@ def parseInput(file_name_string):
         for sensor in sensors:
             g.edges[target[0]].append(sensor[0])
 
-            weights = []
-            for edge in g.targets:
-                distance = g.getEuclidianDistance(sensor[0], edge)
-                battery = g.battery[sensor[0]]
-                #weights[edge] = -(battery / distance)
-                weights.append(-(battery/distance))
-            print target[0], " ", sensor[0], " ", weights
-            g.weights[target[0] + sensor[0]] = max(weights)
+            # weights = []
+            # for edge in g.targets:
+            #     distance = g.getEuclidianDistance(sensor[0], edge)
+            #     battery = g.battery[sensor[0]]
+            #     #weights[edge] = -(battery / distance)
+            #     weights.append(-(battery/distance))
+            # print target[0], " ", sensor[0], " ", weights
+            # g.weights[target[0] + sensor[0]] = max(weights)
 
             # distance = g.getEuclidianDistance(sensor[0], target[0])
             # g.weights[target[0] + sensor[0]] = -distance
@@ -219,13 +223,14 @@ def parseInput(file_name_string):
             # battery = g.battery[sensor[0]]
             # g.weights[target[0] + sensor[0]] = -(battery / distance)
 
-            #g.weights[target[0] + sensor[0]] = 0
+            g.weights[target[0] + sensor[0]] = 0
 
     return g
 
 graph = parseInput("monitor.config")
 result = ucs(graph,"S_1")
-#print graph.getEuclidianDistance("S_4", "T_3")
+print graph.weights["T_1S_4"]
+print graph.getEuclidianDistance("T_1", "S_4")
 print result
 
 
