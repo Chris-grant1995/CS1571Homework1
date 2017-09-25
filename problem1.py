@@ -228,9 +228,9 @@ def parseInput(file_name_string):
     return g
 
 graph = parseInput("monitor.config")
-result = ucs(graph,"S_1")
-print graph.weights["T_1S_4"]
-print graph.getEuclidianDistance("T_1", "S_4")
+result = ucs(graph,"S_3")
+#print graph.weights["T_1S_4"]
+#print graph.getEuclidianDistance("T_1", "S_4")
 print result
 
 
