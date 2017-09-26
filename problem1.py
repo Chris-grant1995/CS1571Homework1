@@ -45,8 +45,9 @@ class Problem1:
         if algo == "unicost":
             q = PriorityQueue()
             for edge in graph.sensors:
+                print "Hi From ", edge
                 q.put(self.ucs(graph,edge))
-            print q.queue
+            print q.get()
         elif algo == "astar":
             q = PriorityQueue()
             for edge in graph.sensors:
@@ -123,18 +124,11 @@ class Problem1:
             else:
                 #print graph.sensors
                 for edge in graph.neighbors(current_node):
-                    if edge not in visited:
-                        # if current_node in graph.sensors:
-                        #     cost = -(self.calculateMaxTime(graph,path + [edge]))
-                        #     #cost = -(self.calculateMaxTime(graph, path))
-                        #     q.put((cost, edge, path + [edge]))
-                        # else:
-                        #     q.put((f + graph.get_cost(current_node,edge),edge, path + [edge]))
+                    if edge not in path:
                         if edge in graph.sensors:
                             q.put((f + graph.get_cost(current_node, edge), edge, path + [edge]))
                         else:
                             q.put((graph.get_cost(current_node, edge), edge, path + [edge]))
-                        # q.put((f + graph.get_cost(current_node, edge), edge, path + [edge]))
                         queueSizes.append(len(q.queue))
 
 

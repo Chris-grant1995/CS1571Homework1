@@ -39,7 +39,10 @@ class Problem2:
         if algo == "unicost":
             q = PriorityQueue()
             for edge in graph.edges:
+                print("Hi From ", edge)
                 q.put(self.ucs(graph,edge))
+                print q.get()
+                return
             print q.get()
         elif algo == "astar":
             q = PriorityQueue()
@@ -111,8 +114,8 @@ class Problem2:
         v = self.bfs(graph,v)
         if v == "No Solution":
             return "No Solution"
-
         while not q.empty():             # while the queue is nonempty
+            #print q.queue
             f, current_node, path = q.get()
             visited.append(current_node)    # mark node visited on expansion,
                                          # only now we know we are on the cheapest path to
@@ -130,6 +133,7 @@ class Problem2:
                     #if edge not in visited:
                     q.put((f + graph.get_cost(current_node,edge), edge, path + [edge]))
                     queueSizes.append(len(q.queue))
+
 
     def id_dfs(self,graph,start):
         import itertools
@@ -224,6 +228,7 @@ class Problem2:
         if v == "No Solution":
             return "No Solution"
 
+
         while not q.empty():             # while the queue is nonempty
             f, current_node, path = q.get()
             visited.append(current_node)    # mark node visited on expansion,
@@ -231,7 +236,7 @@ class Problem2:
                                          # the current node.
             visitedSizes.append(len(visited))
 
-            #print path
+            # print path
 
             if self.checkFinished(graph,path):
                 finalCost = self.calculatePath(graph,path)
@@ -264,7 +269,7 @@ class Problem2:
 
         dataArr = data.split("\n")
 
-        if not dataArr[0] == "aggregation":
+        if not dataArr[0].lower() == "aggregation":
             print "Unknown config file"
             return
 

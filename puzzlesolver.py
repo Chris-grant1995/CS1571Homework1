@@ -13,11 +13,11 @@ def main():
 
     dataArr = data.split("\n")
 
-    if not dataArr[0] == "aggregation" and not dataArr[0] == "monitor":
+    if not dataArr[0].lower() == "aggregation" and not dataArr[0].lower() == "monitor":
         print "Unknown config file"
         return
 
-    if dataArr[0] == "aggregation":
+    if dataArr[0].lower() == "aggregation":
         p = Problem2()
     else:
         p = Problem1()
