@@ -46,7 +46,7 @@ class Problem1:
             q = PriorityQueue()
             for edge in graph.sensors:
                 q.put(self.ucs(graph,edge))
-            print q.get()
+            print q.queue
         elif algo == "astar":
             q = PriorityQueue()
             for edge in graph.sensors:
@@ -118,15 +118,23 @@ class Problem1:
             #print path
 
             if self.checkFinished(graph,path):
-                finalCost = self.calculateMaxTime(graph, path)
-                #print q.queue
+                finalCost = -self.calculateMaxTime(graph, path)
                 return (finalCost,(path,finalCost,max(queueSizes), max(visitedSizes), time))
             else:
                 #print graph.sensors
                 for edge in graph.neighbors(current_node):
                     if edge not in visited:
-                        q.put((f + graph.get_cost(current_node,edge),edge, path + [edge]))
-                        #q.put((graph.get_cost(current_node, edge), edge, path + [edge]))
+                        # if current_node in graph.sensors:
+                        #     cost = -(self.calculateMaxTime(graph,path + [edge]))
+                        #     #cost = -(self.calculateMaxTime(graph, path))
+                        #     q.put((cost, edge, path + [edge]))
+                        # else:
+                        #     q.put((f + graph.get_cost(current_node,edge),edge, path + [edge]))
+                        if edge in graph.sensors:
+                            q.put((f + graph.get_cost(current_node, edge), edge, path + [edge]))
+                        else:
+                            q.put((graph.get_cost(current_node, edge), edge, path + [edge]))
+                        # q.put((f + graph.get_cost(current_node, edge), edge, path + [edge]))
                         queueSizes.append(len(q.queue))
 
 
@@ -182,7 +190,7 @@ class Problem1:
         return math.sqrt(s1+s2)
     def calculateMaxTime(self,graph,path):
         times = []
-        print path
+        #print path
         for i in range(0,len(path), 2):
             sensor = path[i]
             target = path[i+1]

@@ -10,3 +10,5 @@ http://cyluun.github.io/blog/uninformed-search-algorithms-in-python
 
 I spoke with Ryan Yoder and Paul Davis about the asssignment. For the most part, we talked about implementation details and worked
 together to debug issues that we were having.
+
+What isn't working so far is printing the final information, informed search strategies for Problem 1 and uniform cost search for Problem 1.
