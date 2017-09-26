@@ -114,6 +114,8 @@ class Problem2:
         v = self.bfs(graph,v)
         if v == "No Solution":
             return "No Solution"
+
+
         while not q.empty():             # while the queue is nonempty
             #print q.queue
             f, current_node, path = q.get()

@@ -45,7 +45,6 @@ class Problem1:
         if algo == "unicost":
             q = PriorityQueue()
             for edge in graph.sensors:
-                print "Hi From ", edge
                 q.put(self.ucs(graph,edge))
             print q.get()
         elif algo == "astar":
@@ -165,6 +164,90 @@ class Problem1:
             route = dfs(graph,start, depth)
             if route:
                 return
+
+
+    def greedy(self,graph, v):
+        visited = []                  # set of visited nodes
+        q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
+                                         # (f, n, path), with
+                                         # f: the cumulative cost,
+                                         # n: the current node,
+                                         # path: the path that led to the expansion of the current node
+        q.put((0,v, [v]))               # add the starting node, this has zero *cumulative* cost
+                                         # and it's path contains only itself.
+
+        queueSizes = []
+        visitedSizes = []
+        time = len(graph.edges.keys())
+
+        while not q.empty():             # while the queue is nonempty
+            #print q.queue
+            f, current_node, path = q.get()
+            visited.append(current_node)    # mark node visited on expansion,
+                                         # only now we know we are on the cheapest path to
+                                         # the current node.
+            visitedSizes.append(len(visited))
+            time+=1
+
+            #print path
+
+            if self.checkFinished(graph,path):
+                finalCost = -self.calculateMaxTime(graph, path)
+                return (finalCost,(path,finalCost,max(queueSizes), max(visitedSizes), time))
+            else:
+                #print graph.sensors
+                for edge in graph.neighbors(current_node):
+                    if edge not in path:
+                        if edge in graph.sensors:
+                            q.put((f + graph.getEuclidianDistance(current_node, edge), edge, path + [edge]))
+                        else:
+                            q.put((graph.getEuclidianDistance(current_node, edge), edge, path + [edge]))
+                        queueSizes.append(len(q.queue))
+
+
+        return "No Solution"
+
+
+    def astar(self,graph, v):
+        visited = []                  # set of visited nodes
+        q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
+                                         # (f, n, path), with
+                                         # f: the cumulative cost,
+                                         # n: the current node,
+                                         # path: the path that led to the expansion of the current node
+        q.put((0,v, [v]))               # add the starting node, this has zero *cumulative* cost
+                                         # and it's path contains only itself.
+
+        queueSizes = []
+        visitedSizes = []
+        time = len(graph.edges.keys())
+
+        while not q.empty():             # while the queue is nonempty
+            #print q.queue
+            f, current_node, path = q.get()
+            visited.append(current_node)    # mark node visited on expansion,
+                                         # only now we know we are on the cheapest path to
+                                         # the current node.
+            visitedSizes.append(len(visited))
+            time+=1
+
+            #print path
+
+            if self.checkFinished(graph,path):
+                finalCost = -self.calculateMaxTime(graph, path)
+                return (finalCost,(path,finalCost,max(queueSizes), max(visitedSizes), time))
+            else:
+                #print graph.sensors
+                for edge in graph.neighbors(current_node):
+                    if edge not in path:
+                        if edge in graph.sensors:
+                            q.put((f + graph.get_cost(current_node,edge) +graph.getEuclidianDistance(current_node, edge) , edge, path + [edge]))
+                        else:
+                            q.put((graph.get_cost(current_node,edge) +graph.getEuclidianDistance(current_node, edge) , edge, path + [edge]))
+                        queueSizes.append(len(q.queue))
+
+
+        return "No Solution"
 
 
     def checkFinished(self,graph,monitored):
