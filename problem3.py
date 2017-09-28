@@ -1,19 +1,6 @@
 from ast import literal_eval as make_tuple
-import math
+from collections import deque
 
-class Graph:
-    def __init__(self):
-        self.edges = {}
-        self.weights = {}
-        self.coords = {}
-
-    def neighbors(self, node):
-        return self.edges[node]
-    def getCoords(self, node):
-        return self.coords[node]
-
-    def get_cost(self, from_node, to_node):
-        return self.weights[(from_node + to_node)]
 
 
 def parseInput(file_name_string):
@@ -33,7 +20,6 @@ def parseInput(file_name_string):
 
 
 def getSucessorStates(start):
-    g = Graph()
     l = []
     for index in range(1, len(start) + 1):
         # start by grabbing the tuple indices from 0->index
@@ -59,24 +45,67 @@ def getSucessorStates(start):
         # and keep on keepin on.
     return l
 
-def bfs(start, goal):
-    visited = set()
-    queue = [start]
+def bfs(start, end):
+    visited = []
+    queue = deque()
+    queue.append((start, [start]))
+    queueSizes = []
+    visitedSizes = []
+    graph = set()
+    time = 0
 
     while queue:
-        node = queue.pop()
+        node, path = queue.pop()
         if node not in visited:
-            visited.add(node)
-
-            if node == goal:
-                print "TESTING"
-                return
+            visited.append(node)
+            visitedSizes.append(len(visited))
+            graph.add(node)
+            if node == end:
+                ret = (path,time, max(queueSizes), max(visitedSizes))
+                return ret
             neighbors = getSucessorStates(node)
             for neighbor in neighbors:
                 if neighbor not in visited:
-                    queue.append(neighbor)
+                    queue.appendleft((neighbor, path + [neighbor]))
+                    queueSizes.append(len(queue))
+            time = len(graph)
+    return "No Solution"
 
+def id_dfs(start, end):
+    import itertools
+
+    def dfs(start, end,depth ):
+        visited = []
+        stack = [(start, [start])]
+        stackSizes = []
+        visitedSizes = []
+
+        while stack:
+            node, path = stack.pop()
+            if node not in visited:
+                visited.append(node)
+                visitedSizes.append(len(visited))
+                if len(visited) > depth:
+                    return
+                if node == end:
+                    # print visited
+                    # print "Nodes Created: ", len(graph.edges.keys())
+                    # print "Frontier Max Size: ", max(stackSizes)
+                    # print "Visited Max Size: ", max(visitedSizes)
+                    # ret = (len(graph.edges.keys()), (visited,len(graph.edges.keys()), max(stackSizes),max(visitedSizes) ))
+                    # return ret
+                    return path
+                neighbors = getSucessorStates(node)
+                for neighbor in neighbors:
+                    if neighbor not in visited:
+                        stack.append((neighbor, path + [neighbor]))
+                        stackSizes.append(len(stack))
+        return "No Solution"
+
+    for depth in itertools.count():
+        route = dfs(start, end, depth)
+        if route:
+            return route
 
 pancakes, completedPancakes = parseInput("test_pancakes3.config")
-print getSucessorStates(pancakes)
-bfs(pancakes,completedPancakes)
+print id_dfs(pancakes,completedPancakes)

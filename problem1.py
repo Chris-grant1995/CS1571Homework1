@@ -70,26 +70,28 @@ class Problem1:
     def bfs(self,graph, start):
         visited = []
         queue = deque()
-        queue.append(start)
+        queue.append((start, [start]))
         queueSizes = []
         visitedSizes = []
 
         while queue:
-            node = queue.pop()
+            node, path = queue.pop()
             if node not in visited:
                 visited.append(node)
                 visitedSizes.append(len(visited))
 
-                if self.checkFinished(graph,visited):
-                    print visited
-                    print "Nodes Created: ", len(graph.edges.keys())
-                    print "Frontier Max Size: ",max(queueSizes)
-                    print "Visited Max Size: ", max(visitedSizes)
-                    return
+                if self.checkFinished(graph,path):
+                    # print visited
+                    # print "Nodes Created: ", len(graph.edges.keys())
+                    # print "Frontier Max Size: ",max(queueSizes)
+                    # print "Visited Max Size: ", max(visitedSizes)
+                    ret = (len(graph.edges.keys()), (visited, len(graph.edges.keys()), max(queueSizes), max(visitedSizes)))
+                    return ret
                 for neighbor in graph.neighbors(node):
                     if neighbor not in visited:
-                        queue.appendleft(neighbor)
+                        queue.appendleft((neighbor, path + [neighbor]))
                         queueSizes.append(len(queue))
+        return "No Solution"
 
 
     def ucs(self,graph, v):

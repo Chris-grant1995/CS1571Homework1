@@ -39,10 +39,7 @@ class Problem2:
         if algo == "unicost":
             q = PriorityQueue()
             for edge in graph.edges:
-                print("Hi From ", edge)
                 q.put(self.ucs(graph,edge))
-                print q.get()
-                return
             print q.get()
         elif algo == "astar":
             q = PriorityQueue()
@@ -69,27 +66,27 @@ class Problem2:
     def bfs(self,graph, start):
         visited = []
         queue = deque()
-        queue.append(start)
+        queue.append((start, [start]))
         queueSizes = []
         visitedSizes = []
 
         while queue:
-            node = queue.pop()
-            if node not in visited:
-                visited.append(node)
-                visitedSizes.append(len(visited))
+            node, path = queue.pop()
+            #if node not in visited:
+            visited.append(node)
+            visitedSizes.append(len(visited))
 
-                if self.checkFinished(graph,visited):
-                    # print visited
-                    # print "Nodes Created: ", len(graph.edges.keys())
-                    # print "Frontier Max Size: ",max(queueSizes)
-                    # print "Visited Max Size: ", max(visitedSizes)
-                    ret = (len(graph.edges.keys()), (visited, len(graph.edges.keys()), max(queueSizes), max(visitedSizes)))
-                    return ret
-                for neighbor in graph.neighbors(node):
-                    if neighbor not in visited:
-                        queue.appendleft(neighbor)
-                        queueSizes.append(len(queue))
+            if self.checkFinished(graph,path):
+                # print visited
+                # print "Nodes Created: ", len(graph.edges.keys())
+                # print "Frontier Max Size: ",max(queueSizes)
+                # print "Visited Max Size: ", max(visitedSizes)
+                ret = (len(graph.edges.keys()), (visited, len(graph.edges.keys()), max(queueSizes), max(visitedSizes)))
+                return ret
+            for neighbor in graph.neighbors(node):
+                if neighbor not in visited:
+                    queue.appendleft((neighbor, path + [neighbor]))
+                    queueSizes.append(len(queue))
         return "No Solution"
 
 
@@ -255,6 +252,7 @@ class Problem2:
             cost += graph.get_cost(path[i], path[i+1])
         return cost
     def checkFinished(self,graph,visited):
+        # print graph.edges.keys()
         for key in graph.edges.keys():
             if key not in visited:
                 return False
