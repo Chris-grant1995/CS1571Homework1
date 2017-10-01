@@ -1,6 +1,7 @@
 import sys
 from problem2 import Problem2
 from problem1 import Problem1
+from problem3 import  Problem3
 
 
 def main():
@@ -13,12 +14,14 @@ def main():
 
     dataArr = data.split("\n")
 
-    if not dataArr[0].lower() == "aggregation" and not dataArr[0].lower() == "monitor":
+    if not dataArr[0].lower() == "aggregation" and not dataArr[0].lower() == "monitor" and not dataArr[0].lower() == "pancakes" :
         print "Unknown config file"
         return
 
     if dataArr[0].lower() == "aggregation":
         p = Problem2()
+    elif dataArr[0].lower() == "pancakes":
+        p = Problem3()
     else:
         p = Problem1()
 

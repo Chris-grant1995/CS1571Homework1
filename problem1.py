@@ -3,39 +3,41 @@ from ast import literal_eval as make_tuple
 from collections import deque
 import math
 
-class Graph:
-    def __init__(self):
-        self.edges = {}
-        self.weights = {}
-        self.coords = {}
-        self.battery = {}
-        self.targets = []
-        self.sensors = []
 
-
-    def neighbors(self, node):
-        return self.edges[node]
-    def getCoords(self, node):
-        return self.coords[node]
-
-    def get_cost(self, from_node, to_node):
-        return self.weights[(from_node + to_node)]
-
-    def getEuclidianDistance(self, node1, node2):
-        q = self.getCoords(node1)
-        p = self.getCoords(node2)
-
-        q1 = q[0]
-        q2 = q[1]
-        p1 = p[0]
-        p2 = p[1]
-
-        s1 = (q1 - p1) ** 2
-        s2 = (q2 - p2) ** 2
-        return math.sqrt(s1 + s2)
 
 
 class Problem1:
+    class Graph:
+        def __init__(self):
+            self.edges = {}
+            self.weights = {}
+            self.coords = {}
+            self.battery = {}
+            self.targets = []
+            self.sensors = []
+
+        def neighbors(self, node):
+            return self.edges[node]
+
+        def getCoords(self, node):
+            return self.coords[node]
+
+        def get_cost(self, from_node, to_node):
+            return self.weights[(from_node + to_node)]
+
+        def getEuclidianDistance(self, node1, node2):
+            q = self.getCoords(node1)
+            p = self.getCoords(node2)
+
+            q1 = q[0]
+            q2 = q[1]
+            p1 = p[0]
+            p2 = p[1]
+
+            s1 = (q1 - p1) ** 2
+            s2 = (q2 - p2) ** 2
+            return math.sqrt(s1 + s2)
+
     def __init__(self):
         self.test = "test"
     def solveProblem(self,filename, algo):
@@ -46,56 +48,132 @@ class Problem1:
             q = PriorityQueue()
             for edge in graph.sensors:
                 q.put(self.ucs(graph,edge))
-            print q.get()
+            finalTuple = q.get()
+            # print finalTuple
+            cost = finalTuple[0]
+            path = finalTuple[1][0]
+            queueSize = finalTuple[1][2]
+            visitedSize = finalTuple[1][3]
+            time = finalTuple[1][4]
+            print "Uniform Cost Search Result for ", filename
+            print "Assignments: "
+            for i in range(0, len(path), 2):
+                sensor = path[i]
+                target = path[i + 1]
+                print sensor, " -> ", target
+            print "Time: ", time
+            print "Max Frontier Size: ", queueSize
+            print "Max Visited Size: ", visitedSize
+            print "Cost: ", -cost
         elif algo == "astar":
             q = PriorityQueue()
             for edge in graph.sensors:
                 q.put(self.astar(graph,edge))
-            print q.get()
+            finalTuple = q.get()
+            # print finalTuple
+            cost = finalTuple[0]
+            path = finalTuple[1][0]
+            queueSize = finalTuple[1][2]
+            visitedSize = finalTuple[1][3]
+            time = finalTuple[1][4]
+            print "AStar Result for ", filename
+            print "Assignments: "
+            for i in range(0, len(path), 2):
+                sensor = path[i]
+                target = path[i + 1]
+                print sensor, " -> ", target
+            print "Time: ", time
+            print "Max Frontier Size: ", queueSize
+            print "Max Visited Size: ", visitedSize
+            print "Cost: ", -cost
         elif algo == "greedy":
             q = PriorityQueue()
             for edge in graph.sensors:
                 q.put(self.greedy(graph,edge))
-            print q.get()
+            finalTuple = q.get()
+            # print finalTuple
+            cost = finalTuple[0]
+            path = finalTuple[1][0]
+            queueSize = finalTuple[1][2]
+            visitedSize = finalTuple[1][3]
+            time = finalTuple[1][4]
+            print "Greedy Result for ", filename
+            print "Assignments: "
+            for i in range(0, len(path), 2):
+                sensor = path[i]
+                target = path[i + 1]
+                print sensor, " -> ", target
+            print "Time: ", time
+            print "Max Frontier Size: ", queueSize
+            print "Max Visited Size: ", visitedSize
+            print "Cost: ", -cost
         elif algo == "iddfs":
             q = PriorityQueue()
             for edge in graph.sensors:
                 q.put(self.id_dfs(graph,edge))
-            print q.get()
+            finalTuple = q.get()
+            # print finalTuple
+            expansion = finalTuple[0]
+            cost = finalTuple[1][4]
+            path = finalTuple[1][0]
+            queueSize = finalTuple[1][2]
+            visitedSize = finalTuple[1][3]
+            time = finalTuple[1][2]
+            print "IDDFS Result for ", filename
+            print "Assignments: "
+            for i in range(0, len(path), 2):
+                sensor = path[i]
+                target = path[i + 1]
+                print sensor, " -> ", target
+            print "Time: ", time
+            print "Max Frontier Size: ", queueSize
+            print "Max Visited Size: ", visitedSize
+            print "Max Expansion: ", expansion
+            print "Cost: ", cost
         elif algo == "bfs":
             q = PriorityQueue()
             for edge in graph.sensors:
                 q.put(self.bfs(graph,edge))
-            print q.get()
-    def bfs(self,graph, start):
+            finalTuple = q.get()
+            print finalTuple
+            path = finalTuple[0]
+            queueSize = finalTuple[3]
+            visitedSize = finalTuple[2]
+            time = finalTuple[1]
+            print "IDDFS Result for ", filename
+            print "Assignments: "
+            for p in path:
+                print p
+            print "Time: ", time
+            print "Max Frontier Size: ", queueSize
+            print "Max Visited Size: ", visitedSize
+    def bfs(self,graph,start):
         visited = []
         queue = deque()
-        queue.append((start, [start]))
+        queue.append(start)
         queueSizes = []
         visitedSizes = []
+        time = 0
+
 
         while queue:
-            node, path = queue.pop()
+            node = queue.pop()
             if node not in visited:
+                time +=1
                 visited.append(node)
                 visitedSizes.append(len(visited))
 
-                if self.checkFinished(graph,path):
-                    # print visited
-                    # print "Nodes Created: ", len(graph.edges.keys())
-                    # print "Frontier Max Size: ",max(queueSizes)
-                    # print "Visited Max Size: ", max(visitedSizes)
-                    ret = (len(graph.edges.keys()), (visited, len(graph.edges.keys()), max(queueSizes), max(visitedSizes)))
-                    return ret
+                if self.checkFinished(graph,visited):
+                    return (visited, time, max(visitedSizes), max(queueSizes))
                 for neighbor in graph.neighbors(node):
                     if neighbor not in visited:
-                        queue.appendleft((neighbor, path + [neighbor]))
+                        queue.appendleft(neighbor)
                         queueSizes.append(len(queue))
         return "No Solution"
 
 
     def ucs(self,graph, v):
-        visited = []                  # set of visited nodes
+        visited = set()                  # set of visited nodes
         q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
                                          # (f, n, path), with
                                          # f: the cumulative cost,
@@ -111,7 +189,7 @@ class Problem1:
         while not q.empty():             # while the queue is nonempty
             #print q.queue
             f, current_node, path = q.get()
-            visited.append(current_node)    # mark node visited on expansion,
+            visited.add(current_node)    # mark node visited on expansion,
                                          # only now we know we are on the cheapest path to
                                          # the current node.
             visitedSizes.append(len(visited))
@@ -143,20 +221,25 @@ class Problem1:
             stack = [start]
             stackSizes = []
             visitedSizes = []
+            time = 0
 
             while stack:
                 node = stack.pop()
                 if node not in visited:
+                    time +=1
                     visited.append(node)
                     visitedSizes.append(len(visited))
                     if len(visited) > depth:
                         return
                     if self.checkFinished(graph,visited):
-                        print visited
-                        print "Nodes Created: ", len(graph.edges.keys())
-                        print "Frontier Max Size: ", max(stackSizes)
-                        print "Visited Max Size: ", max(visitedSizes)
-                        return visited
+                        # print visited
+                        # print "Nodes Created: ", len(graph.edges.keys())
+                        # print "Frontier Max Size: ", max(stackSizes)
+                        # print "Visited Max Size: ", max(visitedSizes)
+                        # return visited
+                        cost = self.calculateMaxTime(graph,visited)
+                        ret = (visited,time,max(stackSizes),max(visitedSizes),cost)
+                        return ret
                     for neighbor in graph.neighbors(node):
                         if neighbor not in visited:
                             stack.append(neighbor)
@@ -165,11 +248,11 @@ class Problem1:
         for depth in itertools.count():
             route = dfs(graph,start, depth)
             if route:
-                return
+                return (depth,route)
 
 
     def greedy(self,graph, v):
-        visited = []                  # set of visited nodes
+        visited = set()                  # set of visited nodes
         q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
                                          # (f, n, path), with
                                          # f: the cumulative cost,
@@ -180,12 +263,12 @@ class Problem1:
 
         queueSizes = []
         visitedSizes = []
-        time = len(graph.edges.keys())
+        time = 0
 
         while not q.empty():             # while the queue is nonempty
             #print q.queue
             f, current_node, path = q.get()
-            visited.append(current_node)    # mark node visited on expansion,
+            visited.add(current_node)    # mark node visited on expansion,
                                          # only now we know we are on the cheapest path to
                                          # the current node.
             visitedSizes.append(len(visited))
@@ -211,7 +294,7 @@ class Problem1:
 
 
     def astar(self,graph, v):
-        visited = []                  # set of visited nodes
+        visited = set()                  # set of visited nodes
         q = PriorityQueue()        # we store vertices in the (priority) queue as tuples
                                          # (f, n, path), with
                                          # f: the cumulative cost,
@@ -222,12 +305,12 @@ class Problem1:
 
         queueSizes = []
         visitedSizes = []
-        time = len(graph.edges.keys())
+        time = 0
 
         while not q.empty():             # while the queue is nonempty
             #print q.queue
             f, current_node, path = q.get()
-            visited.append(current_node)    # mark node visited on expansion,
+            visited.add(current_node)    # mark node visited on expansion,
                                          # only now we know we are on the cheapest path to
                                          # the current node.
             visitedSizes.append(len(visited))
@@ -296,7 +379,7 @@ class Problem1:
         if len(targets) > len(sensors):
             return "No Solution"
 
-        g = Graph()
+        g = self.Graph()
 
         for sensor in sensors:
             g.edges[sensor[0]] = []
