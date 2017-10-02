@@ -1,0 +1,61 @@
+BFS Result for  test_aggregation2.config
+Path:
+N_00
+N_10
+N_01
+N_11
+N_20
+N_21
+N_02
+N_12
+N_22
+N_30
+N_31
+N_32
+N_03
+N_13
+N_23
+N_33
+N_40
+N_41
+N_42
+N_43
+N_04
+N_14
+N_24
+N_34
+N_44
+Time:  25
+Max Frontier Size:  30
+Max Visited Size:  25
+iddfs Result for  test_aggregation2.config
+Path:
+N_00
+N_11
+N_20
+N_31
+N_40
+N_41
+N_32
+N_23
+N_14
+N_03
+N_12
+N_21
+N_30
+N_10
+N_01
+N_02
+N_13
+N_22
+N_33
+N_42
+N_43
+N_34
+N_44
+N_24
+N_04
+Time:  25
+Max Frontier Size:  51
+Max Visited Size:  25
+Max Expansion:  25

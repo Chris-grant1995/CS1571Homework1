@@ -135,12 +135,11 @@ class Problem1:
             for edge in graph.sensors:
                 q.put(self.bfs(graph,edge))
             finalTuple = q.get()
-            print finalTuple
             path = finalTuple[0]
             queueSize = finalTuple[3]
             visitedSize = finalTuple[2]
             time = finalTuple[1]
-            print "IDDFS Result for ", filename
+            print "BFS Result for ", filename
             print "Assignments: "
             for p in path:
                 print p

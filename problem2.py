@@ -112,7 +112,6 @@ class Problem2:
             for edge in graph.edges:
                 q.put(self.id_dfs(graph,edge))
             finalTuple = q.get()
-            print finalTuple
             if finalTuple == "No Solution":
                 print "iddfs Result for ", filename
                 print finalTuple

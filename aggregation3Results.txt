@@ -1,0 +1,71 @@
+BFS Result for  test_aggregation3.config
+Path:
+N_00
+N_05
+N_01
+N_06
+N_02
+N_07
+N_03
+N_04
+Time:  8
+Max Frontier Size:  7
+Max Visited Size:  8
+iddfs Result for  test_aggregation3.config
+Path:
+N_00
+N_06
+N_02
+N_03
+N_07
+N_01
+N_05
+N_04
+Time:  8
+Max Frontier Size:  9
+Max Visited Size:  8
+Max Expansion:  8
+Uniform Cost Search Result for  test_aggregation3.config
+Path:
+N_00
+N_06
+N_02
+N_01
+N_05
+N_01
+N_07
+N_03
+N_04
+Time:  3159
+Max Frontier Size:  9308
+Max Visited Size:  8
+Cost:  22
+Greedy Result for  test_aggregation3.config
+Path:
+N_00
+N_01
+N_05
+N_06
+N_07
+N_02
+N_03
+N_04
+Time:  5620
+Max Frontier Size:  16195
+Max Visited Size:  8
+Cost:  33
+AStar Result for  test_aggregation3.config
+Path:
+N_00
+N_06
+N_02
+N_01
+N_05
+N_01
+N_07
+N_03
+N_04
+Time:  3530
+Max Frontier Size:  10445
+Max Visited Size:  8
+Cost:  22

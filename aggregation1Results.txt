@@ -1,0 +1,44 @@
+BFS Result for  test_aggregation1.config
+Path:
+N_1
+N_3
+N_2
+Time:  3
+Max Frontier Size:  2
+Max Visited Size:  3
+iddfs Result for  test_aggregation1.config
+Path:
+N_1
+N_2
+N_3
+Time:  3
+Max Frontier Size:  2
+Max Visited Size:  3
+Max Expansion:  3
+Uniform Cost Search Result for  test_aggregation1.config
+Path:
+N_1
+N_3
+N_2
+Time:  4
+Max Frontier Size:  4
+Max Visited Size:  3
+Cost:  9
+Greedy Result for  test_aggregation1.config
+Path:
+N_2
+N_3
+N_1
+Time:  6
+Max Frontier Size:  6
+Max Visited Size:  3
+Cost:  9
+AStar Result for  test_aggregation1.config
+Path:
+N_1
+N_3
+N_2
+Time:  4
+Max Frontier Size:  4
+Max Visited Size:  3
+Cost:  9

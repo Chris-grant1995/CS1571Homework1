@@ -1,0 +1,47 @@
+(['S_1', 'T_1', 'T_2', 'T_3'], 4, 4, 5)
+IDDFS Result for  test_monitor1.config
+Assignments: 
+S_1
+T_1
+T_2
+T_3
+Time:  4
+Max Frontier Size:  5
+Max Visited Size:  4
+IDDFS Result for  test_monitor1.config
+Assignments: 
+S_1  ->  T_3
+S_3  ->  T_2
+S_2  ->  T_1
+Time:  5
+Max Frontier Size:  5
+Max Visited Size:  6
+Max Expansion:  6
+Cost:  24.0
+Uniform Cost Search Result for  test_monitor1.config
+Assignments: 
+S_1  ->  T_1
+S_2  ->  T_2
+S_3  ->  T_3
+Time:  15
+Max Frontier Size:  6
+Max Visited Size:  6
+Cost:  88.0
+Greedy Result for  test_monitor1.config
+Assignments: 
+S_1  ->  T_1
+S_2  ->  T_2
+S_3  ->  T_3
+Time:  11
+Max Frontier Size:  7
+Max Visited Size:  6
+Cost:  88.0
+AStar Result for  test_monitor1.config
+Assignments: 
+S_1  ->  T_1
+S_3  ->  T_3
+S_2  ->  T_2
+Time:  8
+Max Frontier Size:  6
+Max Visited Size:  6
+Cost:  88.0

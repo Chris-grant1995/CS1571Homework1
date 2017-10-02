@@ -46,7 +46,6 @@ class Problem3:
             print "Cost: ", cost
         elif algo == "greedy":
             ret = self.greedy(start, end)
-            print ret
             path = ret[0]
             time = ret[1]
             queueSize = ret[2]
@@ -227,7 +226,7 @@ class Problem3:
                 neighbors = self.getSucessorStates(current_node)
                 for edge in neighbors:
                     if edge not in visited:
-                        q.put((f + 1, edge, path + [edge]))
+                        q.put(( 1, edge, path + [edge]))
                         queueSizes.append(len(q.queue))
 
     def greedy(self,v, end):
@@ -263,7 +262,7 @@ class Problem3:
                 for edge in neighbors:
                     if edge not in visited:
                         h = self.gapHeuristic(edge)
-                        q.put((f + h, edge, path + [edge]))
+                        q.put((h, edge, path + [edge]))
                         queueSizes.append(len(q.queue))
     def astar(self,v, end):
         visited = set()                 # set of visited nodes
@@ -298,7 +297,7 @@ class Problem3:
                 for edge in neighbors:
                     if edge not in visited:
                         h = self.gapHeuristic(edge)
-                        q.put((f + h + 1, edge, path + [edge]))
+                        q.put((h + 1, edge, path + [edge]))
                         queueSizes.append(len(q.queue))
 
     def gapHeuristic(self,successor_state):

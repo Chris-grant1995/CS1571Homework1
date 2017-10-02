@@ -1,0 +1,61 @@
+BFS Result for  test_monitor2.config
+Assignments: 
+S_1
+T_1
+T_2
+T_3
+T_4
+T_5
+T_6
+Time:  7
+Max Frontier Size:  31
+Max Visited Size:  7
+IDDFS Result for  test_monitor2.config
+Assignments: 
+S_1  ->  T_6
+S_7  ->  T_5
+S_6  ->  T_4
+S_5  ->  T_3
+S_4  ->  T_2
+S_3  ->  T_1
+Time:  31
+Max Frontier Size:  31
+Max Visited Size:  12
+Max Expansion:  12
+Cost:  10.0
+Uniform Cost Search Result for  test_monitor2.config
+Assignments: 
+S_1  ->  T_3
+S_2  ->  T_5
+S_3  ->  T_1
+S_4  ->  T_2
+S_5  ->  T_4
+S_7  ->  T_6
+Time:  20051
+Max Frontier Size:  21255
+Max Visited Size:  13
+Cost:  13.0
+Greedy Result for  test_monitor2.config
+Assignments: 
+S_1  ->  T_2
+S_3  ->  T_4
+S_5  ->  T_5
+S_7  ->  T_6
+S_6  ->  T_1
+S_2  ->  T_3
+Time:  1526
+Max Frontier Size:  2989
+Max Visited Size:  13
+Cost:  11.0
+AStar Result for  test_monitor2.config
+Assignments: 
+S_7  ->  T_3
+S_5  ->  T_1
+S_1  ->  T_2
+S_2  ->  T_5
+S_6  ->  T_4
+S_3  ->  T_6
+Time:  27445
+Max Frontier Size:  41695
+Max Visited Size:  13
+Cost:  12.0

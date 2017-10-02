@@ -1,7 +1,7 @@
 import sys
 from problem2 import Problem2
 from problem1 import Problem1
-from problem3 import  Problem3
+from problem3 import Problem3
 
 
 def main():
@@ -14,7 +14,7 @@ def main():
 
     dataArr = data.split("\n")
 
-    if not dataArr[0].lower() == "aggregation" and not dataArr[0].lower() == "monitor" and not dataArr[0].lower() == "pancakes" :
+    if not dataArr[0].lower() == "aggregation" and not dataArr[0].lower() == "monitor" and not dataArr[0].lower() == "pancakes":
         print "Unknown config file"
         return
 
@@ -24,6 +24,12 @@ def main():
         p = Problem3()
     else:
         p = Problem1()
+
+    if sys.argv[2] == "all":
+        algos = ["bfs","iddfs", "unicost", "greedy", "astar"]
+        for algo in algos:
+            p.solveProblem(sys.argv[1], algo)
+        return
 
     p.solveProblem(sys.argv[1], sys.argv[2])
 
